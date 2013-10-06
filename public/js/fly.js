@@ -1,15 +1,22 @@
 ;(function($){
-	var socket = io.connect("http://localhost:8080");
+	var socket = io.connect("http://192.168.1.105:8080");
 	socket.on("news", function (data) {
 		console.log(data);
 		socket.emit("my other event", { my: "data" });
 	});
 
+	socket.on("connect", function (data) {
+		$("#top").html("Connected");
+	});
+
 	// accel
 	var sensitivity = 1;
 
+	window.addEventListener("deviceorientation", onOrientation, true);
 
-	window.ondevicemotion = function(event) {
+	gyro.startTracking(onOrientation);
+
+	function onOrientation(event) {
 
 		var movement = 10;
 		var accX = Math.round(event.accelerationIncludingGravity.x*10) / 10;  
@@ -23,6 +30,6 @@
 		$("#x").html(xA);
 		$("#y").html(yA);
 		$("#z").html(zA);
-	};
+	}
 
 }(jQuery));
