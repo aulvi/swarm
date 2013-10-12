@@ -4,13 +4,18 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "make test-w",
+    "start": "node app.js"
   },
   "author": "Adam Ulvi (s5fs)",
   "license": "MIT",
   "dependencies": {
     "restify": "~2.6.0",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "ar-drone": "~0.2.1"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "mocha": "~1.13.0"
   }
 }
