@@ -24,9 +24,14 @@ suite("lib/swarm", function() {
 	});
 
 	test("land", function(){
+		swarm.land(function(err){
+			expect(err).to.be.null;
+		});
 	});
 
 	test("state", function(){
+		var state = swarm.state();
+		expect(state).to.be.array;
 	});
 
 	test("assignLed", function(){

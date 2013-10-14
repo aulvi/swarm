@@ -3,14 +3,15 @@ mockDrone = {
 	createClient: function(options) {
 		return {
 			options: options,
-			front: function() { console.log( "[Mock] front" ); },
-			back: function() { console.log( "[Mock] back" ); },
-			left: function() { console.log( "[Mock] left" ); },
-			right: function() { console.log( "[Mock] right" ); },
 			takeoff: function() { console.log( "[Mock] takeoff" ); },
 			land: function() { console.log( "[Mock] land" ); },
-			up: function() { console.log( "[Mock] up" ); },
-			down: function() { console.log( "[Mock] down" ); }
+			up: function(speed) { console.log( "[Mock] up: " + speed ); },
+			down: function(speed) { console.log( "[Mock] down: " + speed ); },
+			left: function(speed) { console.log( "[Mock] left: " + speed ); },
+			right: function(speed) { console.log( "[Mock] right: " + speed ); },
+			front: function(speed) { console.log( "[Mock] front: " + speed ); },
+			back: function(speed) { console.log( "[Mock] back: " + speed ); },
+			animateLeds: function(data){ console.log( "[Mock] Animate: " + data ); }
 		};
 	}
 };
