@@ -33,8 +33,4 @@ suite("lib/swarm", function() {
 		var state = swarm.state();
 		expect(state).to.be.array;
 	});
-
-	test("assignLed", function(){
-	});
-
 });
