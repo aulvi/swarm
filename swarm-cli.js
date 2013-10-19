@@ -2,7 +2,10 @@ var
 	keypress = require( "keypress" ),
 	swarm = require( "./lib/swarm" )(),
 	util = require( "util" ),
-	speed = .3
+	speed.step = 5,
+	speed.min = -100,
+	speed.max = 100, 
+	swarmState = { x: 50, y: 50, z: 50, a: 50 }
 ;
 
 // Add a couple of drones
@@ -22,30 +25,80 @@ console.log( "" );
 process.stdin.setRawMode( true );
 process.stdin.resume();
 
+function sendAll() {
+	// X - Front / Back
+	if ( swarmState.x >= 1 ) {
+		swarm.front( swarmState.x / speed.max );
+	}
+	if (swarmState.x <= 0  ) {
+		swarm.back( swarmState.x / -speed.max);
+	}
+	// Y
+	if ( swarmState.y >= 1 ) {
+		swarm.front( swarmState.y / speed.max );
+	}
+	if (swarmState.y <= 0  ) {
+		swarm.back( swarmState.y / -speed.max);
+	}
+	// Z
+	if ( swarmState.z >= 1 ) {
+		swarm.front( swarmState.z / speed.max );
+	}
+	if (swarmState.z <= 0  ) {
+		swarm.back( swarmState.z / -speed.max);
+	}
+	// A
+	if ( swarmState.a >= 1 ) {
+		swarm.front( swarmState.a / speed.max );
+	}
+	if (swarmState.a <= 0  ) {
+		swarm.back( swarmState.a / -speed.max);
+	}
+}
+
 process.stdin.on( "keypress", function(ch,key){
 
+	// Cancel setInterval
+	// (This is used to resend some commands as a fail-safe).
+
+	// Forward / Backward
 	if ( key.name === "w" ) {
-		swarm.front( speed );
+		swarmstate.y += speedStep; 
+	}
+	if ( key.name === "s" ) {
+		swarmstate.y -= speedStep; 
 	}
 
+	// Left / Right
 	if ( key.name === "a" ) {
+		swarmstate.x += speedStep; 
 		swarm.left( speed );
 	}
-
-	if ( key.name === "s" ) {
-		swarm.back( speed );
-	}
-
 	if ( key.name === "d" ) {
+		swarmstate.x -= speedStep; 
 		swarm.right( speed );
 	}
 
+	// Up / Down
 	if ( key.name === "up" ) {
-		swarm.up( speed );
+		swarmstate.z += speedStep; 
+		swarm.up( swarmState.z / 100 );
 	}
 
 	if ( key.name === "down" ) {
-		swarm.down( speed );
+		swarmstate.z -= speedStep; 
+		swarm.down( swarmState.z / 100 );
+	}
+
+	// Spin Clockwise / Counterclockwise
+	if ( key.name === "left" ) {
+		swarmstate.a -= speedStep; 
+		swarm.down( swarmState.a / 100 );
+	}
+
+	if ( key.name === "right" ) {
+		swarmstate.a -= speedStep; 
+		swarm.down( swarmState.a / 100 );
 	}
 
 	if ( key.name === "escape" ) {
@@ -53,13 +106,17 @@ process.stdin.on( "keypress", function(ch,key){
 	}
 
 	if ( key.name === "space" ) {
+		swarmstate.z += 0; 
 		swarm.land();
 	}
 
+	// TODO - Land before closing.
 	if ( key.name === "q" ) {
 		console.log( "Goodbye!" );
 		process.exit(0);
 	}
+
+	sendAll();
 
 });
 
