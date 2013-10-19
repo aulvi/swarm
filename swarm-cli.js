@@ -1,16 +1,18 @@
 var 
 	keypress = require( "keypress" ),
 	swarm = require( "./lib/swarm" )(),
-	util = require( "util" ),
-	speed.step = 5,
-	speed.min = -100,
-	speed.max = 100, 
-	swarmState = { x: 50, y: 50, z: 50, a: 50 }
+	speed = { step: 5, min: -100, max: 100 }
 ;
 
 // Add a couple of drones
 swarm.add({ip: "192.168.1.50"});
 swarm.add({ip: "192.168.1.51"});
+
+// Add some state
+swarm.x = 0;
+swarm.y = 0;
+swarm.z = 0;
+swarm.a = 0;
 
 // Yo, how's this work?
 console.log( "" );
@@ -25,89 +27,72 @@ console.log( "" );
 process.stdin.setRawMode( true );
 process.stdin.resume();
 
-function sendAll() {
-	// X - Front / Back
-	if ( swarmState.x >= 1 ) {
-		swarm.front( swarmState.x / speed.max );
-	}
-	if (swarmState.x <= 0  ) {
-		swarm.back( swarmState.x / -speed.max);
-	}
-	// Y
-	if ( swarmState.y >= 1 ) {
-		swarm.front( swarmState.y / speed.max );
-	}
-	if (swarmState.y <= 0  ) {
-		swarm.back( swarmState.y / -speed.max);
-	}
-	// Z
-	if ( swarmState.z >= 1 ) {
-		swarm.front( swarmState.z / speed.max );
-	}
-	if (swarmState.z <= 0  ) {
-		swarm.back( swarmState.z / -speed.max);
-	}
-	// A
-	if ( swarmState.a >= 1 ) {
-		swarm.front( swarmState.a / speed.max );
-	}
-	if (swarmState.a <= 0  ) {
-		swarm.back( swarmState.a / -speed.max);
-	}
-}
+process.stdin.on( "keypress", onKeypress);
 
-process.stdin.on( "keypress", function(ch,key){
+function onKeypress(ch,key){
 
 	// Cancel setInterval
 	// (This is used to resend some commands as a fail-safe).
 
 	// Forward / Backward
 	if ( key.name === "w" ) {
-		swarmstate.y += speedStep; 
+		if (swarm.y === speed.max)
+			return;
+		swarm.y += speed.step; 
 	}
 	if ( key.name === "s" ) {
-		swarmstate.y -= speedStep; 
+		if (swarm.y === speed.min)
+			return;
+		swarm.y -= speed.step; 
 	}
 
 	// Left / Right
 	if ( key.name === "a" ) {
-		swarmstate.x += speedStep; 
-		swarm.left( speed );
+		if (swarm.x === speed.max)
+			return;
+		swarm.x += speed.step; 
 	}
 	if ( key.name === "d" ) {
-		swarmstate.x -= speedStep; 
-		swarm.right( speed );
+		if (swarm.x === speed.min)
+			return;
+		swarm.x -= speed.step; 
 	}
 
 	// Up / Down
 	if ( key.name === "up" ) {
-		swarmstate.z += speedStep; 
-		swarm.up( swarmState.z / 100 );
+		if (swarm.z === speed.max)
+			return;
+		swarm.z += speed.step; 
 	}
-
 	if ( key.name === "down" ) {
-		swarmstate.z -= speedStep; 
-		swarm.down( swarmState.z / 100 );
+		if (swarm.z === speed.min)
+			return;
+		swarm.z -= speed.step; 
 	}
 
 	// Spin Clockwise / Counterclockwise
 	if ( key.name === "left" ) {
-		swarmstate.a -= speedStep; 
-		swarm.down( swarmState.a / 100 );
+		if (swarm.a === speed.max)
+			return;
+		swarm.a -= speed.step; 
 	}
-
 	if ( key.name === "right" ) {
-		swarmstate.a -= speedStep; 
-		swarm.down( swarmState.a / 100 );
+		if (swarm.a === speed.min)
+			return;
+		swarm.a -= speed.step; 
 	}
 
+	// Takeoff
 	if ( key.name === "escape" ) {
 		swarm.takeoff();
+		return;
 	}
 
+	// Land
 	if ( key.name === "space" ) {
-		swarmstate.z += 0; 
+		swarm.z = 0; 
 		swarm.land();
+		return;
 	}
 
 	// TODO - Land before closing.
@@ -116,10 +101,41 @@ process.stdin.on( "keypress", function(ch,key){
 		process.exit(0);
 	}
 
+	// TODO - Check to see if any cmds require periodic retransmits, schedule them accordingly.
 	sendAll();
+}
 
-});
+function sendAll() {
+	// X - Left / Right
+	if ( swarm.x >= 0 ) {
+		swarm.left( swarm.x / speed.max );
+	}
+	if (swarm.x <= 0  ) {
+		swarm.right( swarm.x / -speed.max);
+	}
+	// Y - Front / Back
+	if ( swarm.y >= 0 ) {
+		swarm.front( swarm.y / speed.max );
+	}
+	if (swarm.y <= 0  ) {
+		swarm.back( swarm.y / -speed.max);
+	}
+	// Z - Up / Down
+	if ( swarm.z >= 0 ) {
+		swarm.up( swarm.z / speed.max );
+	}
+	if (swarm.z <= 0  ) {
+		swarm.down( swarm.z / -speed.max);
+	}
+	// A - Clockwise / Counter-clockwise
+	if ( swarm.a >= 0 ) {
+		swarm.clockwise( swarm.a / speed.max );
+	}
+	if (swarm.a <= 0  ) {
+		swarm.counterClockwise( swarm.a / -speed.max);
+	}
+}
 
-
+// Let's rock!
 keypress( process.stdin );
 
