@@ -36,50 +36,42 @@ function onKeypress(ch,key){
 
 	// Forward / Backward
 	if ( key.name === "w" ) {
-		if (swarm.y === speed.max)
-			return;
-		swarm.y += speed.step; 
+		if (swarm.y != speed.max)
+			swarm.y += speed.step; 
 	}
 	if ( key.name === "s" ) {
-		if (swarm.y === speed.min)
-			return;
-		swarm.y -= speed.step; 
+		if (swarm.y != speed.min)
+			swarm.y -= speed.step; 
 	}
 
 	// Left / Right
 	if ( key.name === "a" ) {
-		if (swarm.x === speed.max)
-			return;
-		swarm.x += speed.step; 
+		if (swarm.x != speed.max)
+			swarm.x += speed.step; 
 	}
 	if ( key.name === "d" ) {
-		if (swarm.x === speed.min)
-			return;
-		swarm.x -= speed.step; 
+		if (swarm.x != speed.min)
+			swarm.x -= speed.step; 
 	}
 
 	// Up / Down
 	if ( key.name === "up" ) {
-		if (swarm.z === speed.max)
-			return;
-		swarm.z += speed.step; 
+		if (swarm.z != speed.max)
+			swarm.z += speed.step; 
 	}
 	if ( key.name === "down" ) {
-		if (swarm.z === speed.min)
-			return;
-		swarm.z -= speed.step; 
+		if (swarm.z != speed.min)
+			swarm.z -= speed.step; 
 	}
 
 	// Spin Clockwise / Counterclockwise
 	if ( key.name === "left" ) {
-		if (swarm.a === speed.max)
-			return;
-		swarm.a -= speed.step; 
+		if (swarm.a != speed.max)
+			swarm.a -= speed.step; 
 	}
 	if ( key.name === "right" ) {
-		if (swarm.a === speed.min)
-			return;
-		swarm.a -= speed.step; 
+		if (swarm.a != speed.min)
+			swarm.a -= speed.step; 
 	}
 
 	// Takeoff
