@@ -34,7 +34,6 @@ void loop() {
  else {
  /* Send the distance to the computer using Serial protocol, and
  turn LED OFF to indicate successful reading. */
- Serial.println(distance);
  }
  Serial.println(distance); 
  //Delay 50ms before next reading.
