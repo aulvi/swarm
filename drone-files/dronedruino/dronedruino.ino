@@ -4,6 +4,8 @@
 int maximumRange = 200; // Maximum range needed
 int minimumRange = 0; // Minimum range needed
 long duration, distance; // Duration used to calculate distance
+int heartBeat = 100;
+int beatCount = 0;
 
 void setup() {
  Serial.begin (9600);
@@ -26,16 +28,18 @@ void loop() {
  //Calculate the distance (in cm) based on the speed of sound.
  distance = duration/58.2;
  
- if (distance >= maximumRange || distance <= minimumRange){
- /* Send a negative number to computer and Turn LED ON 
- to indicate "out of range" */
- Serial.println("-1");
+ // If in range, send it down the line.
+ if (distance >= minimumRange && distance <= maximumRange){
+    Serial.println(distance);
  }
- else {
- /* Send the distance to the computer using Serial protocol, and
- turn LED OFF to indicate successful reading. */
+
+ // Simple heartbeat so you know we're alive!
+ beatCount++;
+ if (beatCount > heartBeat) {
+   beatCount = 0;
+   Serial.println("ping");
  }
- Serial.println(distance); 
+ 
  //Delay 50ms before next reading.
  delay(50);
 }
