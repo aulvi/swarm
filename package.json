@@ -12,7 +12,8 @@
   "dependencies": {
     "restify": "~2.6.0",
     "socket.io": "~0.9.16",
-    "ar-drone": "~0.2.1"
+    "ar-drone": "~0.2.1",
+    "serialport": "~1.2.2"
   },
   "devDependencies": {
     "chai": "~1.8.1",
