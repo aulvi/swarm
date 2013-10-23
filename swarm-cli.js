@@ -6,7 +6,8 @@ var
 ;
 
 // Add a couple of drones
-swarm.add("127.0.0.1");
+//swarm.add("127.0.0.1");
+swarm.add("192.168.1.53");
 
 // Add some state
 swarm.x = 0;
