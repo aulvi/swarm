@@ -1,6 +1,7 @@
 var 
 	io = require( "socket.io" ).listen( 3030 ),
-	serial = require( "./lib/serial" )
+	serial = require( "./lib/serial" ),
+	drone = require( "./lib/drone" )
 ;
 
 serial.connect();
@@ -13,9 +14,11 @@ io.sockets.on( "connection", function( socket ){
 	});
 
 	// Hide for now
+	/*
 	serial.on( "data", function(data){
 		console.log("Serial says: " + data);
 		socket.emit( "data", data);
 	});
+	*/
 });
 
