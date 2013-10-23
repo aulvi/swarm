@@ -1,14 +1,9 @@
 var
-	libdrone = require( "./lib/drone" ),
-	arDrone = require( "ar-drone" ),
-	drone = libdrone(arDrone.createClient({ip:"192.168.1.50"}))
+	client = require( "./lib/drone-client" ),
+	drone = client("127.0.0.1")
 ;
 
-drone.socket.on("connect", function(){
-	console.log("Client connected!");
-
-	drone.socket.on("data", function(data){
-		console.log("DRONE data is: " + JSON.stringify(data));
-	});
-});
-
+setInterval( function(){
+	console.log("Takeoff!");
+	drone.send( [ "takeoff", 0.2 ] );
+}, 2000 );
