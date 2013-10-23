@@ -2,7 +2,8 @@ var
 	io = require( "socket.io" ).listen( 3030 ),
 	serial = require( "./lib/serial" )
 ;
- 
+
+serial.connect();
 
 io.sockets.on( "connection", function( socket ){
 	console.log( "Server connected!" );
@@ -12,6 +13,9 @@ io.sockets.on( "connection", function( socket ){
 	});
 
 	// Hide for now
-	//serial.on( "data", socket.emit);
+	serial.on( "data", function(data){
+		console.log("Serial says: " + data);
+		socket.emit( "data", data);
+	});
 });
 
