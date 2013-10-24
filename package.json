@@ -2,15 +2,13 @@
   "name": "swarm",
   "version": "0.0.1",
   "description": "",
-  "main": "app.js",
   "scripts": {
     "test": "make test-w",
-    "start": "node app.js"
+    "start": "node swarm-cli.js"
   },
   "author": "Adam Ulvi (s5fs)",
   "license": "MIT",
   "dependencies": {
-    "restify": "~2.6.0",
     "socket.io": "~0.9.16",
     "ar-drone": "~0.2.1",
     "serialport": "~1.2.2"
