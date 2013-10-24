@@ -2,12 +2,12 @@ var
 	keypress = require( "keypress" ),
 	libswarm = require( "./lib/swarm" ),
 	swarm = new libswarm(),
-	speed = { step: 5, min: -100, max: 100 }
+	speed = { step: 20, min: -100, max: 100 }
 ;
 
 // Add a couple of drones
 //swarm.add("127.0.0.1");
-swarm.add("192.168.1.51");
+swarm.add("192.168.1.52");
 //swarm.add("192.168.1.53");
 
 // Add some state
