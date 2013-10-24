@@ -1,12 +1,14 @@
 var 
 	keypress = require( "keypress" ),
-	swarm = require( "./lib/swarm" )(),
-	speed = { step: 5, min: -100, max: 100 }
+	libswarm = require( "./lib/swarm" ),
+	swarm = new libswarm(),
+	speed = { step: 20, min: -100, max: 100 }
 ;
 
 // Add a couple of drones
-swarm.add({ip: "192.168.1.50"});
-swarm.add({ip: "192.168.1.51"});
+//swarm.add("127.0.0.1");
+swarm.add("192.168.1.52");
+//swarm.add("192.168.1.53");
 
 // Add some state
 swarm.x = 0;
@@ -76,55 +78,57 @@ function onKeypress(ch,key){
 
 	// Takeoff
 	if ( key.name === "escape" ) {
-		swarm.takeoff();
+		swarm.send( ["takeoff"] );
 		return;
 	}
 
 	// Land
 	if ( key.name === "space" ) {
 		swarm.z = 0; 
-		swarm.land();
+		swarm.send( ["land"] );
 		return;
 	}
 
-	// TODO - Land before closing.
 	if ( key.name === "q" ) {
+		swarm.send( ["land"] );
 		console.log( "Goodbye!" );
-		process.exit(0);
+		var bye = function(){
+			process.exit(0);
+		};
+		setTimeout(bye ,1000);
 	}
 
-	// TODO - Check to see if any cmds require periodic retransmits, schedule them accordingly.
 	sendAll();
 }
 
 function sendAll() {
 	// X - Left / Right
 	if ( swarm.x >= 0 ) {
-		swarm.left( swarm.x / speed.max );
+		swarm.send( ["left", swarm.x / speed.max] );
 	}
 	if (swarm.x <= 0  ) {
-		swarm.right( swarm.x / -speed.max);
+		swarm.send( ["right", swarm.x / -speed.max] );
 	}
 	// Y - Front / Back
 	if ( swarm.y >= 0 ) {
-		swarm.front( swarm.y / speed.max );
+		swarm.send( ["front", swarm.y / speed.max] );
 	}
 	if (swarm.y <= 0  ) {
-		swarm.back( swarm.y / -speed.max);
+		swarm.send( ["back", swarm.y / -speed.max] );
 	}
 	// Z - Up / Down
 	if ( swarm.z >= 0 ) {
-		swarm.up( swarm.z / speed.max );
+		swarm.send( ["up", swarm.z / speed.max] );
 	}
 	if (swarm.z <= 0  ) {
-		swarm.down( swarm.z / -speed.max);
+		swarm.send( ["down", swarm.z / -speed.max] );
 	}
 	// A - Clockwise / Counter-clockwise
 	if ( swarm.a >= 0 ) {
-		swarm.clockwise( swarm.a / speed.max );
+		swarm.send( ["clockwise", swarm.a / speed.max] );
 	}
 	if (swarm.a <= 0  ) {
-		swarm.counterClockwise( swarm.a / -speed.max);
+		swarm.send( ["counterClockwise", swarm.a / -speed.max] );
 	}
 }
 

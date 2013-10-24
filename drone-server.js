@@ -1,24 +1,8 @@
-var 
-	io = require( "socket.io" ).listen( 3030 ),
-	serial = require( "./lib/serial" ),
-	drone = require( "./lib/drone" )
-;
+var server = require( "./lib/drone-server" );
+var arDroner = require ( "./lib/ardroner" );
+var drone = new arDroner( "192.168.1.51" );
 
-serial.connect();
-
-io.sockets.on( "connection", function( socket ){
-	console.log( "Server connected!" );
-
-	socket.on( "cmd", function( data ){
-		console.log( "Data received! " + JSON.stringify( data ) );
-	});
-
-	// Hide for now
-	/*
-	serial.on( "data", function(data){
-		console.log("Serial says: " + data);
-		socket.emit( "data", data);
-	});
-	*/
+server.on("cmd", function(data){
+	console.log( "Drone.send( " + data );
+	drone.send( data );
 });
-
