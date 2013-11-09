@@ -2,19 +2,23 @@ var
 	keypress = require( "keypress" ),
 	libswarm = require( "./lib/swarm" ),
 	swarm = new libswarm(),
-	speed = { step: 20, min: -100, max: 100 }
+	speed = { step: 10, min: -100, max: 100 }
 ;
 
 // Add a couple of drones
 //swarm.add("127.0.0.1");
+//swarm.add("192.168.1.51");
 swarm.add("192.168.1.52");
 //swarm.add("192.168.1.53");
 
 // Add some state
-swarm.x = 0;
-swarm.y = 0;
-swarm.z = 0;
-swarm.a = 0;
+function resetSwarm() {
+	swarm.x = 0;
+	swarm.y = 0;
+	swarm.z = 0;
+	swarm.a = 0;
+}
+resetSwarm();
 
 // Yo, how's this work?
 console.log( "" );
@@ -76,8 +80,20 @@ function onKeypress(ch,key){
 			swarm.a -= speed.step; 
 	}
 
+	// Stop
+	if ( key.name === "enter" ) {
+		resetSwarm();
+		swarm.send( ["stop"] );
+	}
+
+	// Disable emergency
+	if ( key.name === "p" ) {
+		swarm.send( ["disableEmergency"] );
+	}
+
 	// Takeoff
 	if ( key.name === "escape" ) {
+		swarm.send( ["disableEmergency"] );
 		swarm.send( ["takeoff"] );
 		return;
 	}
